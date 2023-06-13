@@ -9,50 +9,38 @@ import androidx.navigation.navArgument
 import com.example.accountsetting.screens.AccountSettingUi
 import com.example.accountsetting.screens.AddNewMobileUi
 import com.example.accountsetting.screens.Screen
-import com.example.accountsetting.screens.VerifyScreenUi
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.AccountSetting.route ){
-        composable(route = Screen.AccountSetting.route){
+    NavHost(navController = navController, startDestination = Screen.AccountSetting.route) {
+        composable(route = Screen.AccountSetting.route) {
             AccountSettingUi(navController)
         }
         composable(
-            route= Screen.VerifyScreen.route + "/{title}/{details}/{verified}",
+            route = Screen.AddNewMobileScreen.route + "/{title}/{index}",
             arguments = listOf(
-                navArgument("title"){
+                navArgument("title") {
                     type = NavType.StringType
                     defaultValue = ""
                     nullable = true
                 },
-                navArgument("details"){
-                    type = androidx.navigation.NavType.StringType
-                    defaultValue = ""
-                    nullable = true
-                },
-                navArgument("verified"){
-                    type = androidx.navigation.NavType.BoolType
-                    defaultValue = false
+                navArgument("index") {
+                    type = androidx.navigation.NavType.IntType
+                    defaultValue = 0
                     nullable = false
                 }
             )
-        ){entry->
-            entry.arguments?.getString("title")?.let {title->
-                entry.arguments?.getString("details")?.let {details->
-                    entry.arguments?.getBoolean("verified")?.let { verified ->
-                        VerifyScreenUi(
-                            navController = navController,
-                            title = title,
-                            details = details,
-                            verified = verified
-                        )
-                    }
+        ) { entry ->
+            entry.arguments?.getString("title")?.let { title ->
+                entry.arguments?.getInt("index")?.let { index ->
+                    AddNewMobileUi(
+                        navController = navController,
+                        title = title,
+                        index = index
+                    )
                 }
             }
-        }
-        composable(route= Screen.AddNewMobileScreen.route){
-            AddNewMobileUi(navController)
         }
     }
 }
